@@ -15,8 +15,13 @@ function h($text) {
  */
 function formatUKDateTime($datetime) {
     if (!$datetime) return '';
-    $dt = new DateTime($datetime);
-    return $dt->format('d/m/Y H:i');
+    try {
+        $dt = new DateTime($datetime, new DateTimeZone('Europe/London'));
+        return $dt->format('d/m/Y H:i');
+    } catch (Exception $e) {
+        error_log("Invalid datetime format: " . $e->getMessage());
+        return '';
+    }
 }
 
 /**

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Year's Trip - Demo Preview</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 NEW YEAR'S TRIP 🎊</h1>
+        
+        <div class="success">This is a demo preview showing the neon-themed UI design!</div>
+        
+        <!-- TIMETABLE (MEALS) SECTION -->
+        <h2>📅 Timetable - Meals</h2>
+        <div class="section-group">
+            <div>
+                <h3>Tuesday 30</h3>
+                <div class="timetable-grid">
+                    <div class="card">
+                        <h3>Breakfast</h3>
+                        <div class="card-content">
+                            <em style="color: var(--text-dim);">No information yet</em>
+                        </div>
+                        <button class="edit-toggle">Edit</button>
+                        <form class="edit-form">
+                            <textarea placeholder="Enter meal details..."></textarea>
+                            <input type="text" placeholder="Your name (required)" required>
+                            <button type="submit">Save</button>
+                        </form>
+                    </div>
+                    <div class="card">
+                        <h3>Dinner</h3>
+                        <div class="card-content">
+                            Roast chicken with vegetables
+                        </div>
+                        <div class="meta">Last updated by John on 01/12/2025 14:30</div>
+                        <button class="edit-toggle">Edit</button>
+                    </div>
+                    <div class="card">
+                        <h3>Tea</h3>
+                        <div class="card-content">
+                            Sandwiches and crisps
+                        </div>
+                        <div class="meta">Last updated by Sarah on 02/12/2025 09:15</div>
+                        <button class="edit-toggle">Edit</button>
+                    </div>
+                    <div class="card">
+                        <h3>Supper</h3>
+                        <div class="card-content">
+                            <em style="color: var(--text-dim);">No information yet</em>
+                        </div>
+                        <button class="edit-toggle">Edit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- GUEST ROOMS SECTION -->
+        <h2>🛏️ Guest Rooms</h2>
+        <div class="room-grid">
+            <div class="card">
+                <h3>Bedroom 1 (downstairs): 2 single beds & ensuite</h3>
+                <div class="card-content">
+                    Mike and Emma will take this room
+                </div>
+                <div class="meta">Last updated by Mike on 03/12/2025 16:45</div>
+                <button class="edit-toggle">Edit</button>
+            </div>
+            <div class="card">
+                <h3>Bedroom 2 (downstairs): 2 single beds & ensuite</h3>
+                <div class="card-content">
+                    <em style="color: var(--text-dim);">No notes yet</em>
+                </div>
+                <button class="edit-toggle">Edit</button>
+            </div>
+            <div class="card">
+                <h3>Bedroom 3 (downstairs): 3 single beds</h3>
+                <div class="card-content">
+                    Perfect for the kids!
+                </div>
+                <div class="meta">Last updated by Lisa on 04/12/2025 11:20</div>
+                <button class="edit-toggle">Edit</button>
+            </div>
+        </div>
+        
+        <!-- GAMES & ACTIVITIES SECTION -->
+        <h2>🎮 Games & Activities</h2>
+        <div class="section-group">
+            <div>
+                <h3>Wednesday 31 (NEW YEARS EVE)</h3>
+                <div class="activity-grid">
+                    <div class="card">
+                        <h3>Morning</h3>
+                        <div class="card-content">
+                            Board games tournament
+                        </div>
+                        <div class="meta">Last updated by Alex on 05/12/2025 10:00</div>
+                        <button class="edit-toggle">Edit</button>
+                    </div>
+                    <div class="card">
+                        <h3>Afternoon</h3>
+                        <div class="card-content">
+                            New Year's Eve party prep
+                        </div>
+                        <div class="meta">Last updated by Chris on 05/12/2025 13:30</div>
+                        <button class="edit-toggle">Edit</button>
+                    </div>
+                    <div class="card">
+                        <h3>Evening</h3>
+                        <div class="card-content">
+                            Countdown to midnight! 🎆
+                        </div>
+                        <div class="meta">Last updated by Sophie on 05/12/2025 18:00</div>
+                        <button class="edit-toggle">Edit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SHOPPING LIST - DAY 1 -->
+        <div class="list-section">
+            <h2>🛒 Day 1 Shopping List</h2>
+            <div class="add-item-form">
+                <form>
+                    <input type="text" placeholder="What do we need?" required>
+                    <input type="text" placeholder="Your name (required)" required>
+                    <button type="submit" class="secondary">Add Item</button>
+                </form>
+            </div>
+            <ul class="list-items">
+                <li class="list-item">
+                    <div class="list-item-content">
+                        <div class="list-item-text">Fresh bread and milk</div>
+                        <div class="meta">Added by Tom on 05/12/2025 09:30</div>
+                    </div>
+                    <button class="delete">Delete</button>
+                </li>
+                <li class="list-item">
+                    <div class="list-item-content">
+                        <div class="list-item-text">Sparkling wine for midnight toast</div>
+                        <div class="meta">Added by Rachel on 05/12/2025 08:15</div>
+                    </div>
+                    <button class="delete">Delete</button>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- EQUIPMENT/ITEMS PEOPLE WILL BRING -->
+        <div class="list-section">
+            <h2>🎒 Items/Equipment People Will Bring</h2>
+            <div class="add-item-form">
+                <form>
+                    <input type="text" placeholder="What are you bringing?" required>
+                    <input type="text" placeholder="Your name (required)" required>
+                    <button type="submit" class="secondary">Add Item</button>
+                </form>
+            </div>
+            <ul class="list-items">
+                <li class="list-item">
+                    <div class="list-item-content">
+                        <div class="list-item-text">PlayStation 5 with controllers</div>
+                        <div class="meta">James will bring this (added 04/12/2025 15:20)</div>
+                    </div>
+                    <button class="delete">Delete</button>
+                </li>
+                <li class="list-item">
+                    <div class="list-item-content">
+                        <div class="list-item-text">Board games collection</div>
+                        <div class="meta">Emma will bring this (added 04/12/2025 12:45)</div>
+                    </div>
+                    <button class="delete">Delete</button>
+                </li>
+            </ul>
+        </div>
+        
+        <div style="text-align: center; margin: 40px 0; color: var(--text-dim);">
+            <p>Have a fantastic New Year's celebration! 🎆</p>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

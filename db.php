@@ -18,7 +18,10 @@ function getDB() {
             $pdo = new PDO($dsn, DB_USER, DB_PASSWORD, $options);
         } catch (PDOException $e) {
             error_log("Database connection failed: " . $e->getMessage());
-            die("Database connection failed. Please check your configuration.");
+            die("Database connection failed. Please check your configuration:<br>" .
+                "1. Verify database credentials in config.php<br>" .
+                "2. Ensure MySQL server is running<br>" .
+                "3. Confirm database exists and schema is imported");
         }
     }
     

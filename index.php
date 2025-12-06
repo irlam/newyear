@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Redirect to prevent form resubmission
     if ($messageType === 'success') {
-        header('Location: ' . $_SERVER['PHP_SELF'] . '?success=1');
+        header('Location: index.php?success=1');
         exit;
     }
 }
