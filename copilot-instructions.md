@@ -1,27 +1,23 @@
+Goal: Rebuild newyear.chrisirlam.com as a PHP + MySQL app with modern neon-themed UI, fully mobile responsive, and open editing (any visitor can add/edit content; must capture name + timestamp in UK format). No Node/Next—just PHP, HTML, CSS (and minimal JS where needed).
 
+Tech stack & constraints
 
-Goal: Build a mobile-friendly, neon-themed “New Year’s Trip” website for newyear.chrisirlam.com using modern, clean code. The site must let any visitor add/edit text in multiple sections and capture their name with each submission. Use the provided MySQL database. Keep times/dates in UK format (DD/MM/YYYY, 24h). Include a brief file-level description at the top of each file. Comment code with intent and “comment code for a later date” where helpful.
+Server-side: PHP 8.x (plain PHP, no heavy framework).
+Frontend: HTML, CSS (neon/dark theme), minimal vanilla JS for interactions.
+Database: MySQL using provided credentials (config via a single PHP config file). Use prepared statements.
+Time/date format: UK (DD/MM/YYYY HH:mm).
+Add a brief description comment at the top of every file.
+Comment code with intent; keep it tidy/modern.
+Features (must-have)
 
-Tech stack (recommended)
-
-Frontend: Next.js (latest) with TypeScript, Tailwind CSS for neon styling, mobile-first responsive.
-Backend/API: Next.js API routes (or a small Express API if preferred) to handle CRUD to MySQL.
-DB: MySQL (credentials below). Use a simple schema for sections/items with name + text + timestamps.
-Persistence: Store all user submissions in MySQL; display latest content on load.
-Database credentials (use in app config/env — I will rotate password later)
-
-Host: (use production host as configured on deployment)
-User: chrisirl_newyear
-Database: chrisirl_newyear
-Password: Subaru5554346
-Features & sections (all editable by anyone, must capture “name”)
-
+Open editing: any user can submit text; every submission requires “name” and records timestamp.
+Sections:
 NEW YEARS TRIP – Timetable (meals)
-Days: Tuesday 30th, Wednesday 31st, Thursday 1st, Friday 2nd
-Slots per day: breakfast, dinner, tea, supper
-Each slot: text + person’s name; fully editable; show last updated time.
+Days: Tue 30, Wed 31, Thu 1, Fri 2
+Slots: breakfast, dinner, tea, supper
+Editable text + name + last updated.
 NEW YEARS TRIP – Guest rooms
-Rooms listed:
+Rooms:
 Bedroom 1 (downstairs): 2 single beds & ensuite
 Bedroom 2 (downstairs): 2 single beds & ensuite
 Bedroom 3 (downstairs): 3 single beds
@@ -30,64 +26,59 @@ Bedroom 5 (upstairs): single and double beds & ensuite
 Bedroom 6 (upstairs): 2 single beds (bathroom on corridor)
 Bedroom 7
 Bedroom 8
-Each room: editable notes + name of editor; last updated time.
+Each room: notes + editor name + last updated.
 NEW YEARS TRIP – GAMES & ACTIVITIES
-Days: Tuesday 30th, Wednesday 31st (NEW YEARS EVE), Thursday 1st (NEW YEARS DAY), Friday 2nd
-Slots per day: morning, afternoon, evening
+Days: Tue 30, Wed 31 (NEW YEARS EVE), Thu 1 (NEW YEARS DAY), Fri 2
+Slots: morning, afternoon, evening
 Editable entries + name + last updated.
 NEW YEARS TRIP – DAY 1 SHOPPING LIST
-Editable list items; each item: text + added-by name + timestamp.
+Add list items (item text + name + timestamp); newest-first.
 NEW YEARS TRIP – SHOPPING LIST (general)
-Same as above (add/remove items; name + timestamp).
-NEW YEARS TRIP – ITEMS/EQUIPMENT PEOPLE WILL BRING (tables/chairs etc)
-List of items with who’s bringing them (name), notes, timestamp.
-UX/styling requirements
+Same as above.
+NEW YEARS TRIP – ITEMS/EQUIPMENT PEOPLE WILL BRING
+Items with who’s bringing them (name), notes, timestamp.
+Data model (suggested)
 
-Neon aesthetic (e.g., dark background, neon accents for headings/cards/buttons).
-Mobile-first responsive layouts; readable neon color contrast; large tap targets.
-Clear call-to-action buttons for “Add/Update”; inline edit or small modal is fine.
-Show last updated time in UK format (DD/MM/YYYY HH:mm).
-Include a short description comment at the top of each file stating what it does.
-Data model (suggestion)
+sections table: id, key (e.g., timetable-tue30-breakfast), title, content, name, updated_at.
+lists table: id, list_key (e.g., shopping-general), item_text, name, created_at.
+Seed initial rows/keys so pages render even before edits.
+Provide an SQL schema file (migration).
+UI/UX
 
-sections table: id, key (e.g., “timetable-breakfast-tue30”), title, content, name, updated_at
-lists table: id, list_key (e.g., “shopping-general”), item_text, name, created_at
-Alternatively, a single entries table with type/category columns; use what keeps code clean.
-Add minimal seed to ensure sections render even before edits.
-API endpoints (suggestion)
+Neon aesthetic on dark background; high contrast; large tap targets; mobile-first responsive.
+Simple forms/inputs per section; Save button; require name; show last updated time.
+Lists: add item field + name; show newest-first; optional delete.
+Config
 
-GET /api/sections?key=... -> fetch section content
-POST /api/sections -> upsert { key, title, content, name }
-GET /api/lists?list_key=... -> fetch list items
-POST /api/lists -> add item { list_key, item_text, name }
-DELETE /api/lists/:id -> optional remove
-Frontend behavior
-
-On load: fetch all sections/lists and render.
-Each section: inline editable textarea/input + “Save” button; require name field.
-Lists: add-item input + name; render items newest-first.
-Show optimistic UI or simple loading states.
+Single PHP config file to read MySQL creds from environment (or a .php config with placeholders).
+Credentials to wire (user will rotate later):
+DB_HOST: (host)
+DB_USER: chrisirl_newyear
+DB_PASSWORD: Subaru5554346
+DB_NAME: chrisirl_newyear
 Security & robustness
 
-Basic validation: trim inputs, length limits, prevent empty name/text.
-Escape output for display; use parameterized queries.
-Rate limiting optional but nice to have.
-No auth required (open edit).
-File/output requirements
-
-Provide full file outputs (no elision). If over message limit, split into parts.
-Add a brief file description at the top of every file.
-Use modern, clean code and pretty UI defaults.
+Server-side validation: trim, length limits, require name and text.
+Prepared statements; escape output.
+Basic CSRF token (simple hidden token in session) preferred if easy; otherwise note in README.
 Deliverables
 
-Full project files (frontend + API) ready to paste.
-SQL schema/migration script for required tables.
-README with setup/run instructions (include env vars for DB).
-Note any assumptions and where to configure the DB host.
-What changes to make (summary for the agent)
+Full PHP project files (no omissions).
+SQL schema/migration file.
+README with setup steps: create DB, import schema, set env/config, how to run on typical shared hosting (e.g., drop-in under public_html/newyear).
+Brief description comment at top of every file.
+Keep code modern/clean.
+What to build
 
-Scaffold a Next.js + TypeScript + Tailwind app with neon theme.
-Implement editable sections and lists per spec, storing all data in MySQL using the provided credentials (config via env).
-Add API routes for CRUD, with validation and timestamps (UK format).
-Render mobile-first pages with neon styling; include last updated and name fields for every edit/add.
-Provide full file contents, SQL schema, and README with setup instructions.
+Entry point: index.php rendering all sections and lists.
+PHP endpoints (can be the same file with routing or small handlers) to handle POST for:
+Updating a section (key/title/content/name).
+Adding list items (list_key/item_text/name).
+Optional delete list item.
+Shared includes: config.php (DB), db.php (PDO helper), functions.php (render helpers, sanitization).
+Assets: a CSS file for neon theme; minimal JS for form submissions/UX (vanilla).
+Completion criteria
+
+After deployment, hitting https://newyear.chrisirlam.com shows the neon site with all sections and editable forms.
+All writes go to MySQL and reflect immediately on reload.
+UK date/time shown for last updated/created.
