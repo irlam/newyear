@@ -55,6 +55,53 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // Handle checkbox toggle via AJAX to prevent page reload
+    document.querySelectorAll('.item-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', function(e) {
+            e.preventDefault();
+            const form = this.closest('form');
+            const formData = new FormData(form);
+            
+            // Optimistically update UI
+            const listItem = this.closest('.list-item');
+            const wasChecked = this.checked;
+            
+            if (wasChecked) {
+                listItem.classList.add('checked');
+            } else {
+                listItem.classList.remove('checked');
+            }
+            
+            // Send AJAX request
+            fetch('index.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    // Revert on error
+                    this.checked = !wasChecked;
+                    if (wasChecked) {
+                        listItem.classList.remove('checked');
+                    } else {
+                        listItem.classList.add('checked');
+                    }
+                    console.error('Failed to update item status');
+                }
+            })
+            .catch(error => {
+                // Revert on error
+                this.checked = !wasChecked;
+                if (wasChecked) {
+                    listItem.classList.remove('checked');
+                } else {
+                    listItem.classList.add('checked');
+                }
+                console.error('Error updating item:', error);
+            });
+        });
+    });
+    
     // Auto-hide success messages after 3 seconds
     const successMessages = document.querySelectorAll('.success');
     successMessages.forEach(msg => {
