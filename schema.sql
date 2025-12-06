@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS lists (
     list_key VARCHAR(100) NOT NULL,
     item_text VARCHAR(500) NOT NULL,
     name VARCHAR(100) NOT NULL,
+    checked TINYINT(1) DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_list_key (list_key),
     INDEX idx_created_at (created_at)

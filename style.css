@@ -196,7 +196,7 @@ button.delete:hover {
     background: var(--bg-card);
     border: 2px solid var(--neon-yellow);
     border-radius: 12px;
-    padding: 25px;
+    padding: 20px;
     margin-bottom: 30px;
     box-shadow: 0 0 15px rgba(255, 238, 0, 0.3);
 }
@@ -205,13 +205,15 @@ button.delete:hover {
     color: var(--neon-yellow);
     text-shadow: 0 0 8px var(--neon-yellow);
     border-bottom-color: var(--neon-yellow);
+    margin: 10px 0 15px;
+    font-size: 1.6rem;
 }
 
 .add-item-form {
     background: rgba(0, 0, 0, 0.3);
-    padding: 20px;
+    padding: 15px;
     border-radius: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .list-items {
@@ -221,27 +223,128 @@ button.delete:hover {
 .list-item {
     background: rgba(0, 0, 0, 0.4);
     border-left: 4px solid var(--neon-green);
-    padding: 15px;
-    margin-bottom: 12px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
     border-radius: 6px;
     display: flex;
-    justify-content: space-between;
+    gap: 10px;
+    align-items: flex-start;
+    transition: all 0.3s ease;
+}
+
+.list-item.checked {
+    opacity: 0.6;
+    border-left-color: var(--text-dim);
+}
+
+.list-item.checked .list-item-text {
+    text-decoration: line-through;
+    color: var(--text-dim);
+}
+
+.list-item-checkbox {
+    display: flex;
     align-items: center;
+    padding-top: 2px;
+}
+
+.item-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--neon-green);
 }
 
 .list-item-content {
     flex: 1;
+    min-width: 0;
 }
 
 .list-item-text {
-    font-size: 1.1rem;
-    margin-bottom: 5px;
+    font-size: 1rem;
+    margin-bottom: 3px;
+    word-wrap: break-word;
+}
+
+.list-item-actions {
+    display: flex;
+    gap: 5px;
+    flex-shrink: 0;
+}
+
+.list-item-actions button {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    min-width: auto;
+    margin-right: 0;
+}
+
+.edit-item-form {
+    margin-top: 10px;
+    display: none;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+}
+
+.edit-item-form.active {
+    display: block;
+}
+
+.edit-item-form input[type="text"] {
+    margin-bottom: 8px;
+}
+
+.edit-item-form button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    margin-right: 5px;
+}
+
+.edit-item-toggle {
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+    box-shadow: 0 0 8px rgba(0, 217, 255, 0.5);
+}
+
+.edit-item-toggle:hover {
+    box-shadow: 0 0 15px rgba(0, 217, 255, 0.8);
+}
+
+.cancel-edit {
+    background: linear-gradient(135deg, #666, #999);
+    box-shadow: 0 0 8px rgba(150, 150, 150, 0.5);
+}
+
+.cancel-edit:hover {
+    box-shadow: 0 0 15px rgba(150, 150, 150, 0.8);
+}
+
+.meta {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 3px;
+    font-style: italic;
+}
+
+.empty-message {
+    color: var(--text-dim);
+    font-style: italic;
+    padding: 10px;
 }
 
 .error {
     background: rgba(255, 0, 0, 0.2);
     border: 1px solid #ff0000;
     color: #ff6666;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.warning {
+    background: rgba(255, 165, 0, 0.2);
+    border: 1px solid #ff9900;
+    color: #ffaa44;
     padding: 10px;
     border-radius: 6px;
     margin-bottom: 10px;

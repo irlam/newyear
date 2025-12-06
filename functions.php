@@ -90,12 +90,55 @@ function addListItem($listKey, $itemText, $name) {
 }
 
 /**
+ * Check if an item already exists in a list (case-insensitive)
+ */
+function checkDuplicateListItem($listKey, $itemText, $excludeId = null) {
+    $db = getDB();
+    if ($excludeId) {
+        $stmt = $db->prepare("SELECT * FROM lists WHERE list_key = ? AND LOWER(TRIM(item_text)) = LOWER(TRIM(?)) AND id != ?");
+        $stmt->execute([$listKey, $itemText, $excludeId]);
+    } else {
+        $stmt = $db->prepare("SELECT * FROM lists WHERE list_key = ? AND LOWER(TRIM(item_text)) = LOWER(TRIM(?))");
+        $stmt->execute([$listKey, $itemText]);
+    }
+    return $stmt->fetch();
+}
+
+/**
  * Delete list item
  */
 function deleteListItem($id) {
     $db = getDB();
     $stmt = $db->prepare("DELETE FROM lists WHERE id = ?");
     return $stmt->execute([$id]);
+}
+
+/**
+ * Update list item text
+ */
+function updateListItem($id, $itemText, $name) {
+    $db = getDB();
+    $stmt = $db->prepare("UPDATE lists SET item_text = ?, name = ? WHERE id = ?");
+    return $stmt->execute([$itemText, $name, $id]);
+}
+
+/**
+ * Toggle checked status of list item
+ */
+function toggleListItemChecked($id) {
+    $db = getDB();
+    $stmt = $db->prepare("UPDATE lists SET checked = NOT checked WHERE id = ?");
+    return $stmt->execute([$id]);
+}
+
+/**
+ * Get a single list item by id
+ */
+function getListItem($id) {
+    $db = getDB();
+    $stmt = $db->prepare("SELECT * FROM lists WHERE id = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetch();
 }
 
 /**

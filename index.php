@@ -60,12 +60,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $message = 'Name: ' . $nameValid['error'];
                 $messageType = 'error';
             } else {
-                if (addListItem($listKey, $itemValid['value'], $nameValid['value'])) {
-                    $message = 'Item added successfully!';
-                    $messageType = 'success';
+                // Check for duplicates
+                $duplicate = checkDuplicateListItem($listKey, $itemValid['value']);
+                if ($duplicate) {
+                    $message = 'Warning: This item "' . h($itemValid['value']) . '" has already been added to this list by ' . h($duplicate['name']) . ' on ' . formatUKDateTime($duplicate['created_at']) . '. Please check the list below.';
+                    $messageType = 'warning';
                 } else {
-                    $message = 'Failed to add item.';
-                    $messageType = 'error';
+                    if (addListItem($listKey, $itemValid['value'], $nameValid['value'])) {
+                        $message = 'Item added successfully!';
+                        $messageType = 'success';
+                    } else {
+                        $message = 'Failed to add item.';
+                        $messageType = 'error';
+                    }
                 }
             }
             
@@ -77,6 +84,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $messageType = 'success';
             } else {
                 $message = 'Failed to delete item.';
+                $messageType = 'error';
+            }
+            
+        } elseif ($action === 'edit_list_item') {
+            // Edit list item
+            $itemId = $_POST['item_id'] ?? 0;
+            $itemText = $_POST['item_text'] ?? '';
+            $name = $_POST['name'] ?? '';
+            
+            // Validate inputs
+            $itemValid = validateInput($itemText, 500, true);
+            $nameValid = validateInput($name, 100, true);
+            
+            if (!$itemValid['valid']) {
+                $message = 'Item: ' . $itemValid['error'];
+                $messageType = 'error';
+            } elseif (!$nameValid['valid']) {
+                $message = 'Name: ' . $nameValid['error'];
+                $messageType = 'error';
+            } else {
+                // Get the current item to check list_key
+                $currentItem = getListItem($itemId);
+                if ($currentItem) {
+                    // Check for duplicates (excluding current item)
+                    $duplicate = checkDuplicateListItem($currentItem['list_key'], $itemValid['value'], $itemId);
+                    if ($duplicate) {
+                        $message = 'Warning: This item "' . h($itemValid['value']) . '" already exists in this list (added by ' . h($duplicate['name']) . ' on ' . formatUKDateTime($duplicate['created_at']) . '). Please use a different description.';
+                        $messageType = 'warning';
+                    } else {
+                        if (updateListItem($itemId, $itemValid['value'], $nameValid['value'])) {
+                            $message = 'Item updated successfully!';
+                            $messageType = 'success';
+                        } else {
+                            $message = 'Failed to update item.';
+                            $messageType = 'error';
+                        }
+                    }
+                } else {
+                    $message = 'Item not found.';
+                    $messageType = 'error';
+                }
+            }
+            
+        } elseif ($action === 'toggle_list_item') {
+            // Toggle checked status
+            $itemId = $_POST['item_id'] ?? 0;
+            if (toggleListItemChecked($itemId)) {
+                $message = 'Item updated!';
+                $messageType = 'success';
+            } else {
+                $message = 'Failed to update item.';
                 $messageType = 'error';
             }
         }
@@ -279,24 +337,45 @@ $csrfToken = generateCSRFToken();
             </div>
             <ul class="list-items">
                 <?php foreach ($shoppingDay1Items as $item): ?>
-                    <li class="list-item">
+                    <li class="list-item <?php echo $item['checked'] ? 'checked' : ''; ?>" data-item-id="<?php echo h($item['id']); ?>">
+                        <div class="list-item-checkbox">
+                            <form method="POST" style="display: inline;">
+                                <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
+                                <input type="hidden" name="action" value="toggle_list_item">
+                                <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
+                                <input type="checkbox" class="item-checkbox" <?php echo $item['checked'] ? 'checked' : ''; ?> 
+                                       onchange="this.form.submit()" title="Mark as obtained">
+                            </form>
+                        </div>
                         <div class="list-item-content">
                             <div class="list-item-text"><?php echo h($item['item_text']); ?></div>
                             <div class="meta">
                                 Added by <?php echo h($item['name']); ?> 
                                 on <?php echo formatUKDateTime($item['created_at']); ?>
                             </div>
+                            <form method="POST" class="edit-item-form">
+                                <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
+                                <input type="hidden" name="action" value="edit_list_item">
+                                <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
+                                <input type="text" name="item_text" value="<?php echo h($item['item_text']); ?>" required maxlength="500">
+                                <input type="text" name="name" value="<?php echo h($item['name']); ?>" placeholder="Your name (required)" required maxlength="100">
+                                <button type="submit">Save</button>
+                                <button type="button" class="cancel-edit">Cancel</button>
+                            </form>
                         </div>
-                        <form method="POST" style="display: inline;">
-                            <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
-                            <input type="hidden" name="action" value="delete_list_item">
-                            <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
-                            <button type="submit" class="delete delete-item">Delete</button>
-                        </form>
+                        <div class="list-item-actions">
+                            <button class="edit-item-toggle">Edit</button>
+                            <form method="POST" style="display: inline;">
+                                <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
+                                <input type="hidden" name="action" value="delete_list_item">
+                                <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
+                                <button type="submit" class="delete delete-item">Delete</button>
+                            </form>
+                        </div>
                     </li>
                 <?php endforeach; ?>
                 <?php if (empty($shoppingDay1Items)): ?>
-                    <li style="color: var(--text-dim); font-style: italic;">No items yet. Add one above!</li>
+                    <li class="empty-message">No items yet. Add one above!</li>
                 <?php endif; ?>
             </ul>
         </div>
@@ -316,24 +395,45 @@ $csrfToken = generateCSRFToken();
             </div>
             <ul class="list-items">
                 <?php foreach ($shoppingGeneralItems as $item): ?>
-                    <li class="list-item">
+                    <li class="list-item <?php echo $item['checked'] ? 'checked' : ''; ?>" data-item-id="<?php echo h($item['id']); ?>">
+                        <div class="list-item-checkbox">
+                            <form method="POST" style="display: inline;">
+                                <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
+                                <input type="hidden" name="action" value="toggle_list_item">
+                                <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
+                                <input type="checkbox" class="item-checkbox" <?php echo $item['checked'] ? 'checked' : ''; ?> 
+                                       onchange="this.form.submit()" title="Mark as obtained">
+                            </form>
+                        </div>
                         <div class="list-item-content">
                             <div class="list-item-text"><?php echo h($item['item_text']); ?></div>
                             <div class="meta">
                                 Added by <?php echo h($item['name']); ?> 
                                 on <?php echo formatUKDateTime($item['created_at']); ?>
                             </div>
+                            <form method="POST" class="edit-item-form">
+                                <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
+                                <input type="hidden" name="action" value="edit_list_item">
+                                <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
+                                <input type="text" name="item_text" value="<?php echo h($item['item_text']); ?>" required maxlength="500">
+                                <input type="text" name="name" value="<?php echo h($item['name']); ?>" placeholder="Your name (required)" required maxlength="100">
+                                <button type="submit">Save</button>
+                                <button type="button" class="cancel-edit">Cancel</button>
+                            </form>
                         </div>
-                        <form method="POST" style="display: inline;">
-                            <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
-                            <input type="hidden" name="action" value="delete_list_item">
-                            <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
-                            <button type="submit" class="delete delete-item">Delete</button>
-                        </form>
+                        <div class="list-item-actions">
+                            <button class="edit-item-toggle">Edit</button>
+                            <form method="POST" style="display: inline;">
+                                <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
+                                <input type="hidden" name="action" value="delete_list_item">
+                                <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
+                                <button type="submit" class="delete delete-item">Delete</button>
+                            </form>
+                        </div>
                     </li>
                 <?php endforeach; ?>
                 <?php if (empty($shoppingGeneralItems)): ?>
-                    <li style="color: var(--text-dim); font-style: italic;">No items yet. Add one above!</li>
+                    <li class="empty-message">No items yet. Add one above!</li>
                 <?php endif; ?>
             </ul>
         </div>
@@ -353,24 +453,45 @@ $csrfToken = generateCSRFToken();
             </div>
             <ul class="list-items">
                 <?php foreach ($equipmentItems as $item): ?>
-                    <li class="list-item">
+                    <li class="list-item <?php echo $item['checked'] ? 'checked' : ''; ?>" data-item-id="<?php echo h($item['id']); ?>">
+                        <div class="list-item-checkbox">
+                            <form method="POST" style="display: inline;">
+                                <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
+                                <input type="hidden" name="action" value="toggle_list_item">
+                                <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
+                                <input type="checkbox" class="item-checkbox" <?php echo $item['checked'] ? 'checked' : ''; ?> 
+                                       onchange="this.form.submit()" title="Mark as brought">
+                            </form>
+                        </div>
                         <div class="list-item-content">
                             <div class="list-item-text"><?php echo h($item['item_text']); ?></div>
                             <div class="meta">
                                 <?php echo h($item['name']); ?> will bring this 
                                 (added <?php echo formatUKDateTime($item['created_at']); ?>)
                             </div>
+                            <form method="POST" class="edit-item-form">
+                                <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
+                                <input type="hidden" name="action" value="edit_list_item">
+                                <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
+                                <input type="text" name="item_text" value="<?php echo h($item['item_text']); ?>" required maxlength="500">
+                                <input type="text" name="name" value="<?php echo h($item['name']); ?>" placeholder="Your name (required)" required maxlength="100">
+                                <button type="submit">Save</button>
+                                <button type="button" class="cancel-edit">Cancel</button>
+                            </form>
                         </div>
-                        <form method="POST" style="display: inline;">
-                            <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
-                            <input type="hidden" name="action" value="delete_list_item">
-                            <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
-                            <button type="submit" class="delete delete-item">Delete</button>
-                        </form>
+                        <div class="list-item-actions">
+                            <button class="edit-item-toggle">Edit</button>
+                            <form method="POST" style="display: inline;">
+                                <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
+                                <input type="hidden" name="action" value="delete_list_item">
+                                <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
+                                <button type="submit" class="delete delete-item">Delete</button>
+                            </form>
+                        </div>
                     </li>
                 <?php endforeach; ?>
                 <?php if (empty($equipmentItems)): ?>
-                    <li style="color: var(--text-dim); font-style: italic;">No items yet. Add one above!</li>
+                    <li class="empty-message">No items yet. Add one above!</li>
                 <?php endif; ?>
             </ul>
         </div>
