@@ -2,7 +2,7 @@
 // Handles edit toggles, form submissions, and delete confirmations
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Toggle edit forms
+    // Toggle edit forms for sections
     document.querySelectorAll('.edit-toggle').forEach(button => {
         button.addEventListener('click', function() {
             const card = this.closest('.card');
@@ -14,6 +14,34 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 form.classList.add('active');
                 this.textContent = 'Cancel';
+            }
+        });
+    });
+    
+    // Toggle edit forms for list items
+    document.querySelectorAll('.edit-item-toggle').forEach(button => {
+        button.addEventListener('click', function() {
+            const listItem = this.closest('.list-item');
+            const form = listItem.querySelector('.edit-item-form');
+            
+            if (form.classList.contains('active')) {
+                form.classList.remove('active');
+                this.textContent = 'Edit';
+            } else {
+                form.classList.add('active');
+                this.textContent = 'Cancel';
+            }
+        });
+    });
+    
+    // Cancel edit for list items
+    document.querySelectorAll('.cancel-edit').forEach(button => {
+        button.addEventListener('click', function() {
+            const form = this.closest('.edit-item-form');
+            const toggleButton = form.closest('.list-item').querySelector('.edit-item-toggle');
+            form.classList.remove('active');
+            if (toggleButton) {
+                toggleButton.textContent = 'Edit';
             }
         });
     });

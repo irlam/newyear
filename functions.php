@@ -99,6 +99,34 @@ function deleteListItem($id) {
 }
 
 /**
+ * Update list item text
+ */
+function updateListItem($id, $itemText, $name) {
+    $db = getDB();
+    $stmt = $db->prepare("UPDATE lists SET item_text = ?, name = ? WHERE id = ?");
+    return $stmt->execute([$itemText, $name, $id]);
+}
+
+/**
+ * Toggle checked status of list item
+ */
+function toggleListItemChecked($id) {
+    $db = getDB();
+    $stmt = $db->prepare("UPDATE lists SET checked = NOT checked WHERE id = ?");
+    return $stmt->execute([$id]);
+}
+
+/**
+ * Get a single list item by id
+ */
+function getListItem($id) {
+    $db = getDB();
+    $stmt = $db->prepare("SELECT * FROM lists WHERE id = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetch();
+}
+
+/**
  * Generate CSRF token
  */
 function generateCSRFToken() {
