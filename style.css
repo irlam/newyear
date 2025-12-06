@@ -1,0 +1,295 @@
+/* Neon-themed CSS for New Year's Trip Planning App */
+/* Dark background with vibrant neon accents for headings, cards, and buttons */
+
+:root {
+    --neon-pink: #ff006e;
+    --neon-blue: #00d9ff;
+    --neon-green: #00ff88;
+    --neon-yellow: #ffee00;
+    --neon-purple: #b900ff;
+    --bg-dark: #0a0a0f;
+    --bg-card: #1a1a24;
+    --text-main: #e0e0e0;
+    --text-dim: #a0a0a0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin: 30px 0;
+    color: var(--neon-pink);
+    text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
+}
+
+h2 {
+    font-size: 1.8rem;
+    margin: 40px 0 20px;
+    color: var(--neon-blue);
+    text-shadow: 0 0 8px var(--neon-blue);
+    border-bottom: 2px solid var(--neon-blue);
+    padding-bottom: 10px;
+}
+
+h3 {
+    font-size: 1.3rem;
+    margin: 20px 0 10px;
+    color: var(--neon-green);
+}
+
+.section-group {
+    display: grid;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.timetable-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.room-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.activity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: var(--bg-card);
+    border: 2px solid var(--neon-purple);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(185, 0, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 0 25px rgba(185, 0, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.card h3 {
+    margin-top: 0;
+    font-size: 1.1rem;
+}
+
+.card-content {
+    min-height: 60px;
+    margin: 15px 0;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+}
+
+.meta {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-top: 10px;
+    font-style: italic;
+}
+
+.edit-form {
+    margin-top: 15px;
+    display: none;
+}
+
+.edit-form.active {
+    display: block;
+}
+
+textarea, input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid var(--neon-blue);
+    border-radius: 6px;
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 1rem;
+    margin-bottom: 10px;
+    transition: border-color 0.3s ease;
+}
+
+textarea:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: var(--neon-pink);
+    box-shadow: 0 0 10px rgba(255, 0, 110, 0.3);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+button {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(255, 0, 110, 0.5);
+    min-width: 100px;
+    margin-right: 10px;
+}
+
+button:hover {
+    box-shadow: 0 0 20px rgba(255, 0, 110, 0.8);
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button.secondary {
+    background: linear-gradient(135deg, var(--neon-blue), var(--neon-green));
+    box-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+}
+
+button.secondary:hover {
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.8);
+}
+
+button.delete {
+    background: linear-gradient(135deg, #ff0000, #cc0000);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    min-width: auto;
+}
+
+button.delete:hover {
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+}
+
+.list-section {
+    background: var(--bg-card);
+    border: 2px solid var(--neon-yellow);
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 0 15px rgba(255, 238, 0, 0.3);
+}
+
+.list-section h2 {
+    color: var(--neon-yellow);
+    text-shadow: 0 0 8px var(--neon-yellow);
+    border-bottom-color: var(--neon-yellow);
+}
+
+.add-item-form {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.list-items {
+    list-style: none;
+}
+
+.list-item {
+    background: rgba(0, 0, 0, 0.4);
+    border-left: 4px solid var(--neon-green);
+    padding: 15px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.list-item-content {
+    flex: 1;
+}
+
+.list-item-text {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.error {
+    background: rgba(255, 0, 0, 0.2);
+    border: 1px solid #ff0000;
+    color: #ff6666;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.success {
+    background: rgba(0, 255, 136, 0.2);
+    border: 1px solid var(--neon-green);
+    color: var(--neon-green);
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    .timetable-grid,
+    .room-grid,
+    .activity-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    button {
+        width: 100%;
+        margin-bottom: 10px;
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+        margin: 20px 0;
+    }
+    
+    .card {
+        padding: 15px;
+    }
+}
