@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $duplicate = checkDuplicateListItem($listKey, $itemValid['value']);
                 if ($duplicate) {
                     $message = 'Warning: This item "' . h($itemValid['value']) . '" has already been added to this list by ' . h($duplicate['name']) . ' on ' . formatUKDateTime($duplicate['created_at']) . '. Please check the list below.';
-                    $messageType = 'error';
+                    $messageType = 'warning';
                 } else {
                     if (addListItem($listKey, $itemValid['value'], $nameValid['value'])) {
                         $message = 'Item added successfully!';
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $duplicate = checkDuplicateListItem($currentItem['list_key'], $itemValid['value'], $itemId);
                     if ($duplicate) {
                         $message = 'Warning: This item "' . h($itemValid['value']) . '" already exists in this list (added by ' . h($duplicate['name']) . ' on ' . formatUKDateTime($duplicate['created_at']) . '). Please use a different description.';
-                        $messageType = 'error';
+                        $messageType = 'warning';
                     } else {
                         if (updateListItem($itemId, $itemValid['value'], $nameValid['value'])) {
                             $message = 'Item updated successfully!';
