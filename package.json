@@ -1,0 +1,29 @@
+{
+  "name": "newyear",
+  "version": "1.0.0",
+  "description": "New Year's Trip website with neon theme",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "mysql2": "^3.15.3",
+    "next": "^16.0.7",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.22",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.18"
+  }
+}
