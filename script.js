@@ -58,8 +58,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle checkbox toggle via AJAX to prevent page reload
     document.querySelectorAll('.item-checkbox').forEach(checkbox => {
         checkbox.addEventListener('change', function(e) {
-            e.preventDefault();
             const form = this.closest('form');
+            
+            // If no form (demo page), just update UI
+            if (!form) {
+                const listItem = this.closest('.list-item');
+                if (this.checked) {
+                    listItem.classList.add('checked');
+                } else {
+                    listItem.classList.remove('checked');
+                }
+                return;
+            }
+            
+            e.preventDefault();
             const formData = new FormData(form);
             
             // Optimistically update UI
