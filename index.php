@@ -60,12 +60,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $message = 'Name: ' . $nameValid['error'];
                 $messageType = 'error';
             } else {
-                if (addListItem($listKey, $itemValid['value'], $nameValid['value'])) {
-                    $message = 'Item added successfully!';
-                    $messageType = 'success';
-                } else {
-                    $message = 'Failed to add item.';
+                // Check for duplicates
+                $duplicate = checkDuplicateListItem($listKey, $itemValid['value']);
+                if ($duplicate) {
+                    $message = 'Warning: This item "' . h($itemValid['value']) . '" has already been added to this list by ' . h($duplicate['name']) . ' on ' . formatUKDateTime($duplicate['created_at']) . '. Please check the list below.';
                     $messageType = 'error';
+                } else {
+                    if (addListItem($listKey, $itemValid['value'], $nameValid['value'])) {
+                        $message = 'Item added successfully!';
+                        $messageType = 'success';
+                    } else {
+                        $message = 'Failed to add item.';
+                        $messageType = 'error';
+                    }
                 }
             }
             
@@ -97,11 +104,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $message = 'Name: ' . $nameValid['error'];
                 $messageType = 'error';
             } else {
-                if (updateListItem($itemId, $itemValid['value'], $nameValid['value'])) {
-                    $message = 'Item updated successfully!';
-                    $messageType = 'success';
+                // Get the current item to check list_key
+                $currentItem = getListItem($itemId);
+                if ($currentItem) {
+                    // Check for duplicates (excluding current item)
+                    $duplicate = checkDuplicateListItem($currentItem['list_key'], $itemValid['value'], $itemId);
+                    if ($duplicate) {
+                        $message = 'Warning: This item "' . h($itemValid['value']) . '" already exists in this list (added by ' . h($duplicate['name']) . ' on ' . formatUKDateTime($duplicate['created_at']) . '). Please use a different description.';
+                        $messageType = 'error';
+                    } else {
+                        if (updateListItem($itemId, $itemValid['value'], $nameValid['value'])) {
+                            $message = 'Item updated successfully!';
+                            $messageType = 'success';
+                        } else {
+                            $message = 'Failed to update item.';
+                            $messageType = 'error';
+                        }
+                    }
                 } else {
-                    $message = 'Failed to update item.';
+                    $message = 'Item not found.';
                     $messageType = 'error';
                 }
             }
@@ -337,7 +358,7 @@ $csrfToken = generateCSRFToken();
                                 <input type="hidden" name="action" value="edit_list_item">
                                 <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
                                 <input type="text" name="item_text" value="<?php echo h($item['item_text']); ?>" required maxlength="500">
-                                <input type="text" name="name" placeholder="Your name (required)" required maxlength="100">
+                                <input type="text" name="name" value="<?php echo h($item['name']); ?>" placeholder="Your name (required)" required maxlength="100">
                                 <button type="submit">Save</button>
                                 <button type="button" class="cancel-edit">Cancel</button>
                             </form>
@@ -395,7 +416,7 @@ $csrfToken = generateCSRFToken();
                                 <input type="hidden" name="action" value="edit_list_item">
                                 <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
                                 <input type="text" name="item_text" value="<?php echo h($item['item_text']); ?>" required maxlength="500">
-                                <input type="text" name="name" placeholder="Your name (required)" required maxlength="100">
+                                <input type="text" name="name" value="<?php echo h($item['name']); ?>" placeholder="Your name (required)" required maxlength="100">
                                 <button type="submit">Save</button>
                                 <button type="button" class="cancel-edit">Cancel</button>
                             </form>
@@ -453,7 +474,7 @@ $csrfToken = generateCSRFToken();
                                 <input type="hidden" name="action" value="edit_list_item">
                                 <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
                                 <input type="text" name="item_text" value="<?php echo h($item['item_text']); ?>" required maxlength="500">
-                                <input type="text" name="name" placeholder="Your name (required)" required maxlength="100">
+                                <input type="text" name="name" value="<?php echo h($item['name']); ?>" placeholder="Your name (required)" required maxlength="100">
                                 <button type="submit">Save</button>
                                 <button type="button" class="cancel-edit">Cancel</button>
                             </form>

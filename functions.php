@@ -90,6 +90,21 @@ function addListItem($listKey, $itemText, $name) {
 }
 
 /**
+ * Check if an item already exists in a list (case-insensitive)
+ */
+function checkDuplicateListItem($listKey, $itemText, $excludeId = null) {
+    $db = getDB();
+    if ($excludeId) {
+        $stmt = $db->prepare("SELECT * FROM lists WHERE list_key = ? AND LOWER(TRIM(item_text)) = LOWER(TRIM(?)) AND id != ?");
+        $stmt->execute([$listKey, $itemText, $excludeId]);
+    } else {
+        $stmt = $db->prepare("SELECT * FROM lists WHERE list_key = ? AND LOWER(TRIM(item_text)) = LOWER(TRIM(?))");
+        $stmt->execute([$listKey, $itemText]);
+    }
+    return $stmt->fetch();
+}
+
+/**
  * Delete list item
  */
 function deleteListItem($id) {
