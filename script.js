@@ -84,6 +84,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 listItem.classList.remove('checked');
             }
             
+            // Helper function to revert UI on error
+            const revertUI = () => {
+                this.checked = !wasChecked;
+                if (wasChecked) {
+                    listItem.classList.remove('checked');
+                } else {
+                    listItem.classList.add('checked');
+                }
+            };
+            
             // Send AJAX request
             fetch('index.php', {
                 method: 'POST',
@@ -91,24 +101,14 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => {
                 if (!response.ok) {
-                    // Revert on error
-                    this.checked = !wasChecked;
-                    if (wasChecked) {
-                        listItem.classList.remove('checked');
-                    } else {
-                        listItem.classList.add('checked');
-                    }
-                    console.error('Failed to update item status');
+                    revertUI();
+                    console.error('Failed to update item status:', response.status);
                 }
+                // Note: We accept the optimistic update on success
+                // The server will apply the change in the database
             })
             .catch(error => {
-                // Revert on error
-                this.checked = !wasChecked;
-                if (wasChecked) {
-                    listItem.classList.remove('checked');
-                } else {
-                    listItem.classList.add('checked');
-                }
+                revertUI();
                 console.error('Error updating item:', error);
             });
         });
