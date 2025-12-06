@@ -55,6 +55,65 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // Handle checkbox toggle via AJAX to prevent page reload
+    document.querySelectorAll('.item-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', function(e) {
+            const form = this.closest('form');
+            
+            // If no form (demo page), just update UI
+            if (!form) {
+                const listItem = this.closest('.list-item');
+                if (this.checked) {
+                    listItem.classList.add('checked');
+                } else {
+                    listItem.classList.remove('checked');
+                }
+                return;
+            }
+            
+            e.preventDefault();
+            const formData = new FormData(form);
+            
+            // Optimistically update UI
+            const listItem = this.closest('.list-item');
+            const wasChecked = this.checked;
+            
+            if (wasChecked) {
+                listItem.classList.add('checked');
+            } else {
+                listItem.classList.remove('checked');
+            }
+            
+            // Helper function to revert UI on error
+            const revertUI = () => {
+                this.checked = !wasChecked;
+                if (wasChecked) {
+                    listItem.classList.remove('checked');
+                } else {
+                    listItem.classList.add('checked');
+                }
+            };
+            
+            // Send AJAX request
+            fetch('index.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    revertUI();
+                    console.error('Failed to update item status:', response.status);
+                }
+                // Note: We accept the optimistic update on success
+                // The server will apply the change in the database
+            })
+            .catch(error => {
+                revertUI();
+                console.error('Error updating item:', error);
+            });
+        });
+    });
+    
     // Auto-hide success messages after 3 seconds
     const successMessages = document.querySelectorAll('.success');
     successMessages.forEach(msg => {

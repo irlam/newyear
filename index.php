@@ -344,7 +344,7 @@ $csrfToken = generateCSRFToken();
                                 <input type="hidden" name="action" value="toggle_list_item">
                                 <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
                                 <input type="checkbox" class="item-checkbox" <?php echo $item['checked'] ? 'checked' : ''; ?> 
-                                       onchange="this.form.submit()" title="Mark as obtained">
+                                       title="Mark as obtained">
                             </form>
                         </div>
                         <div class="list-item-content">
@@ -369,7 +369,7 @@ $csrfToken = generateCSRFToken();
                                 <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
                                 <input type="hidden" name="action" value="delete_list_item">
                                 <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
-                                <button type="submit" class="delete delete-item">Delete</button>
+                                <button type="submit" class="delete delete-item">Del</button>
                             </form>
                         </div>
                     </li>
@@ -402,7 +402,7 @@ $csrfToken = generateCSRFToken();
                                 <input type="hidden" name="action" value="toggle_list_item">
                                 <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
                                 <input type="checkbox" class="item-checkbox" <?php echo $item['checked'] ? 'checked' : ''; ?> 
-                                       onchange="this.form.submit()" title="Mark as obtained">
+                                       title="Mark as obtained">
                             </form>
                         </div>
                         <div class="list-item-content">
@@ -427,7 +427,7 @@ $csrfToken = generateCSRFToken();
                                 <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
                                 <input type="hidden" name="action" value="delete_list_item">
                                 <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
-                                <button type="submit" class="delete delete-item">Delete</button>
+                                <button type="submit" class="delete delete-item">Del</button>
                             </form>
                         </div>
                     </li>
@@ -460,7 +460,7 @@ $csrfToken = generateCSRFToken();
                                 <input type="hidden" name="action" value="toggle_list_item">
                                 <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
                                 <input type="checkbox" class="item-checkbox" <?php echo $item['checked'] ? 'checked' : ''; ?> 
-                                       onchange="this.form.submit()" title="Mark as brought">
+                                       title="Mark as brought">
                             </form>
                         </div>
                         <div class="list-item-content">
@@ -485,7 +485,7 @@ $csrfToken = generateCSRFToken();
                                 <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
                                 <input type="hidden" name="action" value="delete_list_item">
                                 <input type="hidden" name="item_id" value="<?php echo h($item['id']); ?>">
-                                <button type="submit" class="delete delete-item">Delete</button>
+                                <button type="submit" class="delete delete-item">Del</button>
                             </form>
                         </div>
                     </li>
